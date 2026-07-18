@@ -2,11 +2,14 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-import seaborn as sns
+#import seaborn as sns
 import random
+import config as cfg
+
 from datetime import datetime, timedelta
 
-#Gerar dados fictícios de vendas:
+
+#Gerar dados fictícios de vendas, default 600 registros:
 def gerar_dados_vendas(num_registros=600):
     
     """
@@ -29,8 +32,7 @@ def gerar_dados_vendas(num_registros=600):
     # Cria listas para armazenar os dados
     lista_produtos = list(produtos.keys())
     
-    #Cria uma lista com os nomes da cidade
-    lista_cidades = list(cidades_estados.keys())  
+
     
     #Aarmazena os dados em listas
     lista_dados_vendas = []
@@ -48,6 +50,9 @@ def gerar_dados_vendas(num_registros=600):
         'Brasília': 'DF',
         'Manaus': 'AM'
     }
+    
+    #Cria uma lista com os nomes da cidade
+    lista_cidades = list(cidades_estados.keys())  
     
     data_inicial = datetime(2026, 1, 1)
     
@@ -87,3 +92,20 @@ def gerar_dados_vendas(num_registros=600):
         
         #Cria um DataFrame a partir da lista de dados de vendas
         return pd.DataFrame(lista_dados_vendas)
+    
+#Gerar os dados de vendas
+df_vendas = gerar_dados_vendas(cfg.NUMERO_DE_REGISTROS)
+#Shape (número de linhas e colunas) do DataFrame
+df_vendas.shape
+#Exibe as 5 primeiras linhas do DataFrame
+df_vendas.head()
+#Exibe as 5 ultimas linhas do DataFrame
+df_vendas.tail()
+#Exibe informações sobre o DataFrame, como tipos de dados e valores nulos
+df_vendas.info()
+
+
+
+
+
+
