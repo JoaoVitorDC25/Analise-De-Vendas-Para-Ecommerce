@@ -9,6 +9,7 @@ import config as cfg
 import utils as ut
 
 from datetime import datetime, timedelta
+from matplotlib.ticker import FuncFormatter
 
 # pd.set_option('display.max_columns', None)
 # pd.set_option('display.max_rows', 100)
@@ -147,9 +148,7 @@ plt.show()
 df_vendas['Mes'] = df_vendas['Data_Pedido'].dt.to_period('M')
 faturamento_mensal = df_vendas.groupby('Mes')['Faturamento'].sum()
 faturamento_mensal.index = faturamento_mensal.index.strftime('%Y-%m')
-
-#Converte o faturamento
-#faturamento_mensal = faturamento_mensal.map('R$ {:,.2f}'.format)
+ut.text("Faturamento Mensal:\n", faturamento_mensal)
 
 #Grafico de faturamento mensal
 plt.figure(figsize=(12, 6))
@@ -165,3 +164,53 @@ plt.xticks(rotation=45)
 plt.tight_layout()
 plt.show()
 
+
+#Faturamento por estado
+faturamento_estado = df_vendas.groupby('Estado')['Faturamento'].sum().sort_values(ascending=False)
+ut.text("Faturamento por Estado:\n", faturamento_estado)
+
+# Cria uma nova figura com tamanho de 12 por 7 polegadas
+plt.figure(figsize = (12, 7))
+
+# Plota os dados de faturamento por estado em formato de gráfico de barras
+# Usando a paleta de cores "rocket" do Seaborn
+faturamento_estado.plot(kind = 'bar', color = sns.color_palette("husl", 7))
+
+# Define o título do gráfico com fonte de tamanho 16
+plt.title('Faturamento Por Estado', fontsize = 16)
+plt.xlabel('Estado', fontsize = 12)
+plt.ylabel('Faturamento (R$)', fontsize = 12)
+plt.xticks(rotation = 0)
+
+plt.tight_layout()
+plt.show()
+
+#Faturamento por categoria
+faturamento_categoria = df_vendas.groupby('Categoria')['Faturamento'].sum().sort_values(ascending=False)
+ut.text("Faturamento por Categoria:\n", faturamento_categoria)
+
+faturamento_ordenado = faturamento_categoria.sort_values(ascending=False)
+
+fig, ax = plt.subplots(figsize=(12, 7))
+
+def formatador_milhares(y, pos):
+    """Formata o valor em milhares (K) com o cifrão R$."""
+    return f'R$ {y/1000:,.0f}K'
+
+# Cria o objeto formatador
+formatter = FuncFormatter(formatador_milhares)
+
+# Aplica o formatador ao eixo Y (ax.yaxis)
+ax.yaxis.set_major_formatter(formatter)
+
+faturamento_ordenado.plot(kind = 'bar', ax = ax, color = sns.color_palette("viridis", len(faturamento_ordenado)))
+
+# Adiciona títulos e labels usando 'ax.set_...'
+ax.set_title('Faturamento Por Categoria', fontsize = 16)
+ax.set_xlabel('Categoria', fontsize = 12)
+ax.set_ylabel('Faturamento', fontsize = 12)
+
+plt.xticks(rotation = 45, ha = 'right')
+
+plt.tight_layout()
+plt.show()

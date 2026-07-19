@@ -1,4 +1,11 @@
+## Objetivos
 
+Este projeto busca responder às seguintes perguntas:
+
+- Quais são os produtos mais vendidos?
+- Quais categorias geram maior receita?
+- Como as vendas variam ao longo do tempo?
+- Quais regiões apresentam melhor desempenho?
 
 ## Tecnologias utilizadas
 - Python 3
@@ -16,3 +23,5 @@ ANALISE-DE-VENDAS-PARA-ECOMMERCE
 ├── main.py
 ├── README.md
 └── utils.py
+
+
