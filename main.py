@@ -4,11 +4,18 @@ import numpy as np
 import matplotlib.pyplot as plt
 #import seaborn as sns
 import random
+
 import config as cfg
+import utils as ut
 
 from datetime import datetime, timedelta
 
+pd.set_option('display.max_columns', None)
+pd.set_option('display.max_rows', 100)
+pd.set_option('display.width', None)
+pd.set_option('display.max_colwidth', None)
 
+ut.clear()
 #Gerar dados fictícios de vendas, default 600 registros:
 def gerar_dados_vendas(num_registros=600):
     
@@ -95,14 +102,21 @@ def gerar_dados_vendas(num_registros=600):
     
 #Gerar os dados de vendas
 df_vendas = gerar_dados_vendas(cfg.NUMERO_DE_REGISTROS)
+
 #Shape (número de linhas e colunas) do DataFrame
-df_vendas.shape
-#Exibe as 5 primeiras linhas do DataFrame
-df_vendas.head()
-#Exibe as 5 ultimas linhas do DataFrame
-df_vendas.tail()
+ut.text("Shape do DataFrame (linhas, colunas):",df_vendas.shape)
+
+#print("Exibindo as 5 primeiras linhas do DataFrame:\n", df_vendas.head())
+#print("Exibindo as 5 ultimas linhas do DataFrame:\n", df_vendas.tail())
+
 #Exibe informações sobre o DataFrame, como tipos de dados e valores nulos
+ut.text("Informações sobre o DataFrame:")
 df_vendas.info()
+
+#Resumo estatistico do DataFrame, incluindo contagem, média, desvio padrão, valores mínimo e máximo
+ut.text("Resumo estatístico do DataFrame:\n",df_vendas.describe())
+
+
 
 
 
