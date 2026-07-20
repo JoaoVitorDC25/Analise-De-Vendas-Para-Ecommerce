@@ -3,7 +3,7 @@ import pandas as pd
 import seaborn as sns
 import config as cfg
 
-import data_generetor as dg
+import data_generator as dg
 import utils as ut
 import charts as ch
 
