@@ -4,7 +4,7 @@ def clear():
     os.system("cls")
     
 def text(*text):
-    print("=" * 60)
+    print("\n" + "=" * 60 + "\n")
     print(text[0].center(60))
     print(*text[1:])
     

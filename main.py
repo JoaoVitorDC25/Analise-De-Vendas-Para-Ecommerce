@@ -8,11 +8,13 @@ import random
 import config as cfg
 import data_generetor as dg
 import utils as ut
+import charts as ch
 
 from datetime import datetime, timedelta
 from matplotlib.ticker import FuncFormatter
 
 ut.clear()
+ch.configurar_estilo()
     
 #Gerar os dados de vendas
 df_vendas = dg.gerar_dados_vendas(cfg.NUMERO_DE_REGISTROS)
@@ -41,91 +43,70 @@ ut.text(f"Exibindo as {cfg.AMOSTRAS} primeiras linhas do DataFrame:\n",
 ut.text(f"Exibindo as {cfg.AMOSTRAS} últimas linhas do DataFrame:\n",
         df_vendas[['Produto','Data_Pedido','Estado','Status_Entrega']].tail(cfg.AMOSTRAS))
 
-#Top 10 Produtos mais vendidos, ordenados pela quantidade total vendida
+# ========== Top 10 Produtos mais vendidos ==========
+# Dados
 top10_vendas = df_vendas.groupby('Produto')['Quantidade'].sum().sort_values(ascending=False).head(10)
 ut.text("Top 10 Produtos mais vendidos (quantidade total):\n", top10_vendas)
 
-#Gráfico
-sns.set_style("whitegrid")
-plt.figure(figsize=(12, 7))
+# Gráfico
+ch.grafico_barras_horizontal(
+    dados=top10_vendas.sort_values(ascending=True),
+    titulo="Top 10 Produtos mais vendidos (quantidade total)",
+    xlabel="Quantidade total vendida",
+    ylabel="Produto",
+    cor="skyblue")
 
-top10_vendas.sort_values(ascending=True).plot(kind='barh', color='skyblue')
-
-plt.title("Top 10 Produtos mais vendidos (quantidade total)", fontsize=16)
-plt.xlabel("Quantidade total vendida", fontsize=12)
-plt.ylabel("Produto", fontsize=12)
-
-#Exibe o gráfico
-plt.tight_layout()
-plt.show()
-
-#Faturamento mensal
+# ========== Faturamento mensal ==========
+# Dados
 df_vendas['Mes'] = df_vendas['Data_Pedido'].dt.to_period('M')
 faturamento_mensal = df_vendas.groupby('Mes')['Faturamento'].sum()
 faturamento_mensal.index = faturamento_mensal.index.strftime('%Y-%m')
 ut.text("Faturamento Mensal:\n", faturamento_mensal)
 
-#Grafico de faturamento mensal
-plt.figure(figsize=(12, 6))
+# Gráfico
+ch.grafico_linha(
+    dados=faturamento_mensal,
+    titulo="Evolução do Faturamento Mensal",
+    xlabel="Mês",
+    ylabel="Faturamento (R$)",
+    cor="green",
+    marker="o",
+    linestyle="-"
+)
 
-faturamento_mensal.plot(kind='line', marker='o',linestyle='-', color='green')
-
-plt.title("Evolução do Faturamento Mensal", fontsize=16)
-plt.xlabel("Mês", fontsize=12)
-plt.ylabel("Faturamento (R$)", fontsize=12)
-
-plt.xticks(rotation=45)
-#Exibe o gráfico
-plt.tight_layout()
-plt.show()
-
-
-#Faturamento por estado
+# ========== Faturamento por estado ==========
+# Dados
 faturamento_estado = df_vendas.groupby('Estado')['Faturamento'].sum().sort_values(ascending=False)
 ut.text("Faturamento por Estado:\n", faturamento_estado)
 
-# Cria uma nova figura com tamanho de 12 por 7 polegadas
-plt.figure(figsize = (12, 7))
+# Gráfico
+ch.grafico_barras_vertical(
+    dados=faturamento_estado,
+    titulo="Faturamento por Estado",
+    xlabel="Estado",
+    ylabel="Faturamento (R$)",
+    cor=sns.color_palette("husl", 7)
+)
 
-# Plota os dados de faturamento por estado em formato de gráfico de barras
-# Usando a paleta de cores "rocket" do Seaborn
-faturamento_estado.plot(kind = 'bar', color = sns.color_palette("husl", 7))
-
-# Define o título do gráfico com fonte de tamanho 16
-plt.title('Faturamento Por Estado', fontsize = 16)
-plt.xlabel('Estado', fontsize = 12)
-plt.ylabel('Faturamento (R$)', fontsize = 12)
-plt.xticks(rotation = 0)
-
-plt.tight_layout()
-plt.show()
-
-#Faturamento por categoria
+# ========== Faturamento por categoria ==========
+# Dados
 faturamento_categoria = df_vendas.groupby('Categoria')['Faturamento'].sum().sort_values(ascending=False)
 ut.text("Faturamento por Categoria:\n", faturamento_categoria)
-
 faturamento_ordenado = faturamento_categoria.sort_values(ascending=False)
-
-fig, ax = plt.subplots(figsize=(12, 7))
 
 def formatador_milhares(y, pos):
     """Formata o valor em milhares (K) com o cifrão R$."""
     return f'R$ {y/1000:,.0f}K'
 
-# Cria o objeto formatador
 formatter = FuncFormatter(formatador_milhares)
 
-# Aplica o formatador ao eixo Y (ax.yaxis)
-ax.yaxis.set_major_formatter(formatter)
-
-faturamento_ordenado.plot(kind = 'bar', ax = ax, color = sns.color_palette("viridis", len(faturamento_ordenado)))
-
-# Adiciona títulos e labels usando 'ax.set_...'
-ax.set_title('Faturamento Por Categoria', fontsize = 16)
-ax.set_xlabel('Categoria', fontsize = 12)
-ax.set_ylabel('Faturamento', fontsize = 12)
-
-plt.xticks(rotation = 45, ha = 'right')
-
-plt.tight_layout()
-plt.show()
+# Gráfico
+ch.grafico_barras_vertical(
+    dados=faturamento_categoria,
+    titulo="Faturamento por Categoria",
+    xlabel="Categoria",
+    ylabel="Faturamento",
+    cor=sns.color_palette("viridis", len(faturamento_categoria)),
+    rotacao_x=45,
+    formatter=formatter
+)
