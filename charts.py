@@ -14,7 +14,8 @@ def grafico_barras_horizontal(
         xlabel,
         ylabel,
         cor="skyblue",
-        figsize=cfg.FIGURA_PADRAO
+        figsize=cfg.FIGURA_PADRAO,
+        caminho=None
     ):
 
     plt.figure(figsize=figsize)
@@ -29,7 +30,9 @@ def grafico_barras_horizontal(
     plt.ylabel(ylabel, fontsize=cfg.FONTSIZE_LABELS)
 
     plt.tight_layout()
+    plt.savefig(caminho, dpi=cfg.DPI, bbox_inches='tight') if caminho else None
     plt.show()
+    
 
 def grafico_linha(
         dados,
@@ -39,7 +42,8 @@ def grafico_linha(
         cor="green",
         marker="o",
         linestyle="-",
-        figsize=cfg.FIGURA_PADRAO
+        figsize=cfg.FIGURA_PADRAO,
+        caminho=None
     ):
 
     plt.figure(figsize=figsize)
@@ -56,8 +60,9 @@ def grafico_linha(
     plt.ylabel(ylabel, fontsize=cfg.FONTSIZE_LABELS)
 
     plt.tight_layout()
+    plt.savefig(caminho, dpi=cfg.DPI, bbox_inches='tight') if caminho else None
     plt.show()
-    
+        
 def grafico_barras_vertical(
     dados,
     titulo,
@@ -66,7 +71,8 @@ def grafico_barras_vertical(
     cor=None,
     figsize=cfg.FIGURA_PADRAO,
     rotacao_x=0,
-    formatter=None
+    formatter=None,
+    caminho=None
     ):
 
     if cor is None:
@@ -90,4 +96,6 @@ def grafico_barras_vertical(
     plt.xticks(rotation=rotacao_x)
 
     plt.tight_layout()
+    plt.savefig(caminho, dpi=cfg.DPI, bbox_inches='tight') if caminho else None
     plt.show()
+    

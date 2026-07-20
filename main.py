@@ -1,16 +1,12 @@
 #Bibliotecas
 import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
 import seaborn as sns
-import random
-
 import config as cfg
+
 import data_generetor as dg
 import utils as ut
 import charts as ch
 
-from datetime import datetime, timedelta
 from matplotlib.ticker import FuncFormatter
 
 ut.clear()
@@ -54,7 +50,8 @@ ch.grafico_barras_horizontal(
     titulo="Top 10 Produtos mais vendidos (quantidade total)",
     xlabel="Quantidade total vendida",
     ylabel="Produto",
-    cor="skyblue")
+    cor="skyblue",
+    caminho= "images/top10_produtos_mais_vendidos.png")
 
 # ========== Faturamento mensal ==========
 # Dados
@@ -71,8 +68,8 @@ ch.grafico_linha(
     ylabel="Faturamento (R$)",
     cor="green",
     marker="o",
-    linestyle="-"
-)
+    linestyle="-",
+    caminho= "images/faturamento_mensal.png")
 
 # ========== Faturamento por estado ==========
 # Dados
@@ -85,8 +82,8 @@ ch.grafico_barras_vertical(
     titulo="Faturamento por Estado",
     xlabel="Estado",
     ylabel="Faturamento (R$)",
-    cor=sns.color_palette("husl", 7)
-)
+    cor=sns.color_palette("husl", 7),
+    caminho= "images/faturamento_por_estado.png")
 
 # ========== Faturamento por categoria ==========
 # Dados
@@ -108,5 +105,5 @@ ch.grafico_barras_vertical(
     ylabel="Faturamento",
     cor=sns.color_palette("viridis", len(faturamento_categoria)),
     rotacao_x=45,
-    formatter=formatter
-)
+    formatter=formatter,
+    caminho= "images/faturamento_por_categoria.png")
